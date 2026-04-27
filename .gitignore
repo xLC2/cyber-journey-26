@@ -216,3 +216,69 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Security & Secrets (CRITICAL)
+.env
+*.key
+*.pem
+*.crt
+credentials.json
+secrets.json
+*.password
+*.token
+
+# Logs & Temp Files
+*.log
+temp/
+tmp/
+*.tmp
+
+# Burp Suite / Proxy
+burp-config/
+*.har
+
+# Virtual Machines (Do not commit VM disks)
+*.vmdk
+*.vdi
+*.vhdx
+*.ova
+*.ovf
+
+# Write-ups (Optional: If you want to keep drafts private)
+drafts/
