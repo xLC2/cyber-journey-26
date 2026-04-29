@@ -1,0 +1,265 @@
+# Day 3 — SQL Injection (Deeper Dive)
+
+Continuing from Day 2 — things started getting more practical today.  
+Moved from just understanding SQL behaviour → actually seeing how different injection techniques work in action.
+
+---
+
+## Error-Based SQL Injection
+
+Goal: Extract data using database error messages.
+
+Idea:
+- Force the database to produce an error
+- Embed useful data inside that error
+
+Common trick:
+- Use functions like RAND(), COUNT(), GROUP BY
+
+Example concept:
+SELECT name FROM users GROUP BY ROUND(RAND(0));
+
+→ Creates grouping collisions due to same RAND values
+
+Now forcing error:
+SELECT name FROM users GROUP BY ROUND(RAND(0)) HAVING MIN(0);
+
+Result:
+ERROR: Duplicate entry '1' for key 'group_key'
+
+Why this matters:
+- The error leaks internal processing
+- Can be manipulated to include sensitive data
+
+---
+
+### Modifying Query to Extract Data
+
+SELECT name, CONCAT(version(), database(), user(), ROUND(RAND(0)))
+FROM users;
+
+→ Combines:
+- DB version
+- DB name
+- Current user
+
+Injected version:
+
+OR 1=1 GROUP BY CONCAT(version(), database(), user(), ROUND(RAND(0))) HAVING MIN(0);
+
+Result:
+- Error now contains:
+  - version
+  - database name
+  - user (e.g., root@localhost)
+
+→ Data exfiltration through error message
+
+---
+
+## Boolean-Based Blind SQL Injection
+
+Used when:
+- No visible errors
+- No direct output
+
+Approach:
+- Ask TRUE / FALSE questions
+- Observe behavior changes
+
+Step 1: Find length of database name
+
+database() length = ?
+Try:
+database() length = 1
+database() length = 2
+...
+
+(Bruteforce until correct)
+
+---
+
+Step 2: Extract characters
+
+SUBSTRING(database(), 1, 1) = 'a'
+
+→ Check one character at a time
+
+---
+
+Optimization trick:
+
+Instead of char-by-char brute force:
+
+database() LIKE '%a%'
+
+→ Faster way to check if character exists anywhere
+
+Example:
+SELECT * FROM login WHERE id=2 OR database() LIKE '%a%';
+
+---
+
+## Time-Based Blind SQL Injection
+
+Used when:
+- No output
+- No visible difference
+
+Technique:
+- Use time delays
+
+Syntax idea:
+IF(condition, true_action, false_action)
+
+Example:
+SELECT * FROM users 
+WHERE name='Sara' 
+AND IF(database()='test', SLEEP(2), SLEEP(0));
+
+Result:
+- If condition TRUE → delay (2 sec)
+- If FALSE → normal response
+
+→ Timing = signal
+
+---
+
+## Semi-Automated SQL (BurpSuite)
+
+Workflow:
+
+1. Open BurpSuite
+2. Turn Intercept OFF
+3. Use built-in browser
+4. Perform login / action on target
+
+Then:
+- Go to "Target" tab
+- Find request URL
+- Send to Repeater
+
+---
+
+### Repeater Usage
+
+- Modify request manually
+- Inject payloads
+- Observe response changes
+
+---
+
+### Intruder Usage
+
+Purpose:
+- Automate payload testing
+
+Steps:
+- Select positions (payload injection points)
+- Choose attack type
+
+Types:
+- Sniper → one position at a time
+- Battering Ram → same payload everywhere
+
+---
+
+### Payload Section
+
+- Use simple lists
+- Or custom payload sets
+
+---
+
+### Result Analysis
+
+- Use "Grep Match"
+- Highlight responses containing patterns (flags / keywords)
+
+→ Helps identify successful injections faster
+
+---
+
+## Fully Automated SQL — SQLMap
+
+Tool: sqlmap
+
+Run basic help:
+python sqlmap.py --hh
+
+---
+
+Example (URL-based):
+
+python sqlmap.py -u http://localhost/login.php --risk=3 --level=5
+
+---
+
+Using Burp request file:
+
+python sqlmap.py -r req.txt --risk=3 --level=5
+
+Why use request file:
+- More accurate than URL-only
+- Includes headers, cookies, session data
+
+---
+
+SQLMap Capabilities:
+- Detect injection
+- Dump databases
+- Extract tables & data
+- Automate entire attack chain
+
+---
+
+## Defending Against SQL Injection
+
+Layer 1 — Code Level:
+- Input validation
+- Parameterized queries
+- Stored procedures
+- Proper escaping
+
+---
+
+Layer 2 — Host-Based WAF:
+- Application-level filtering
+
+---
+
+Layer 3 — Edge WAF:
+- Cloud-level protection (e.g., Cloudflare)
+
+---
+
+Key Idea:
+Security should be layered, not dependent on one control.
+
+---
+
+## Personal Log (Day 3)
+
+Today felt like a shift.
+
+Yesterday was more about understanding SQL behaviour.  
+Today actually showed how that behaviour gets exploited.
+
+At first, things didn’t fully click — especially error-based logic and how GROUP BY + RAND() leads to collisions.  
+But once I walked through it slowly, it started making sense.
+
+Boolean-based and time-based felt slower, more methodical — almost like interrogating the database instead of reading it directly.
+
+Also got hands-on with BurpSuite and sqlmap — which made things feel more real rather than just theory.
+
+Still basic, but the pieces are starting to connect now.
+
+Plan:
+- Continue SQL tomorrow
+- Practice more labs
+- Get comfortable before moving ahead
+
+Not rushing this part.
+This is core.
+
+---
