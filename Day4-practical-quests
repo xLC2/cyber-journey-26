@@ -1,0 +1,128 @@
+# Day 4 — Practical Work (Labs + Setup)
+
+Today was less about learning new concepts and more about actually applying what was covered over the last few days.
+
+Focused on hands-on practice.
+
+---
+
+## PortSwigger Labs (SQL Injection Practice)
+
+Worked through multiple SQL Injection labs.
+
+Key takeaway:
+Reading payloads is one thing — running them in a real environment is completely different.
+
+### What was practiced:
+- Testing basic injection points
+- Using payloads like:
+  ```sql
+  ' OR 1=1 --
+  ```
+- Observing how applications respond differently
+- Identifying where inputs are actually vulnerable
+
+---
+
+## Practical Learning Approach
+
+Instead of just watching or reading:
+
+Flow followed:
+```
+Watch → Pause → Test → Fail → Retry
+```
+
+Why this matters:
+- Errors show how the backend behaves
+- Failures reveal incorrect assumptions
+- Repetition builds pattern recognition
+
+---
+
+## YouTube Practical Walkthroughs
+
+Watched practical demonstrations alongside labs.
+
+Purpose:
+- Understand real-time thinking process
+- Compare approach with own attempts
+- Identify gaps in logic
+
+---
+
+## Linux Setup (Preparation)
+
+Did some environment setup for upcoming work.
+
+### Covered:
+- Basic navigation:
+  ```bash
+  ls
+  cd
+  pwd
+  ```
+- File handling:
+  ```bash
+  touch file.txt
+  mkdir folder
+  ```
+- Editing:
+  ```bash
+  nano file.txt
+  ```
+
+### Goal:
+Get comfortable inside the environment before going deeper into exploitation.
+
+---
+
+## Hack The Box Setup
+
+Set up Hack The Box for future practice.
+
+### Focus:
+- Getting access ready
+- Understanding how labs are structured
+- Preparing for more realistic targets
+
+---
+
+## Observations
+
+- Practical work exposes gaps faster than theory
+- Same payload behaves differently depending on context
+- Environment setup is as important as exploitation
+- Repetition is key — not just reading once
+
+---
+
+## Current State
+
+No major new concepts today.
+
+But:
+Understanding improved.
+
+Things are starting to feel less abstract and more real.
+
+---
+
+## Plan
+
+- Continue with more labs
+- Strengthen SQL injection understanding through practice
+- Get fully comfortable with Linux environment
+- Start approaching slightly harder targets (HTB)
+
+---
+
+## Personal Log
+
+Mostly practical today.
+
+Didn’t pick up new theory,
+but understood existing concepts better.
+
+Still a lot to cover.
+
