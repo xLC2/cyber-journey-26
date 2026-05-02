@@ -1,0 +1,255 @@
+# Day 5 — Networking Fundamentals (Deep Dive)
+
+Today was focused on understanding how networks actually work beneath the surface.  
+Not just definitions, but how devices identify each other, communicate, and move data.
+
+This was more of a foundational build, but an important one.
+
+---
+
+## 🔹 What is a Network?
+
+A network is basically a collection of devices connected together to share data.
+
+Example:
+- Devices connected via router → local network
+- Multiple networks connected → internet
+
+Insight:
+Internet is not a single thing — it’s a collection of networks connected together
+
+---
+
+## 🔹 Private vs Public Network
+
+Private Network:
+- Used inside homes, offices, labs
+- Not directly accessible from internet
+- Uses reserved IP ranges (like 192.168.x.x)
+
+Public Network:
+- Accessible over the internet
+- Assigned by ISP
+- Used to communicate globally
+
+Key Understanding:
+A device usually has:
+- Private IP → inside network
+- Public IP → outside world identity
+
+---
+
+## 🔹 IP Address (Logical Identity)
+
+IP address is used to identify a device on a network.
+
+- Works like a name or address
+- Can change over time (dynamic)
+
+Types:
+- Private IP → inside LAN
+- Public IP → internet-facing
+
+Example:
+192.168.1.10 → Private  
+86.x.x.x → Public  
+
+Important:
+Devices in the same network have similar IP ranges  
+→ helps identify they belong to same network
+
+---
+
+## 🔹 MAC Address (Physical Identity)
+
+MAC address is:
+- Hardware-based identifier
+- Assigned to network interface (NIC)
+- Unique for every device
+
+Format:
+50:3E:AA:E8:3B:64  
+
+Key Difference from IP:
+
+IP Address:
+- Logical
+- Can change
+- Used across networks
+
+MAC Address:
+- Physical
+- Permanent
+- Used in local network
+
+Insight:
+Even if IP changes, MAC stays same → real identity of device
+
+---
+
+## 🔹 How Devices Communicate
+
+Inside a network:
+- Devices don’t directly know MAC of others
+- They use IP first, then resolve MAC using ARP
+
+Flow:
+1. Device knows target IP  
+2. Uses ARP to find MAC  
+3. Sends data using MAC  
+
+---
+
+## 🔹 Network Devices
+
+Router:
+- Connects different networks
+- Acts as gateway to internet
+- Routes packets between networks
+
+Switch:
+- Connects devices inside same network
+- Uses MAC table to send data correctly
+- Efficient (no unnecessary broadcast)
+
+Hub:
+- Sends data to all devices
+- No intelligence → inefficient
+
+---
+
+## 🔹 Network Topologies
+
+Star Topology:
+- All devices connected to central device (switch/router)
+
+Pros:
+- Easy to manage  
+- One device failure doesn’t affect others  
+
+Cons:
+- If central device fails → whole network down  
+
+---
+
+Bus Topology:
+- Single backbone cable  
+
+Cons:
+- If cable breaks → entire network affected  
+- Not scalable  
+
+---
+
+Ring Topology:
+- Devices connected in circular form  
+
+Cons:
+- Slow  
+- One failure disrupts entire loop  
+
+---
+
+## 🔹 Subnetting (Basic Understanding)
+
+Subnetting = dividing a network into smaller parts
+
+Why needed:
+- Better organization  
+- Security separation  
+- Efficient traffic handling  
+
+Example:
+Instead of one large network → multiple smaller subnets  
+
+---
+
+## 🔹 ARP (Address Resolution Protocol)
+
+Used to convert IP → MAC address
+
+Working:
+1. Device sends ARP request (broadcast)  
+2. Target replies with MAC  
+3. Mapping stored in ARP cache  
+
+Key Insight:
+Communication inside LAN depends heavily on ARP
+
+---
+
+## 🔹 ICMP (Internet Control Message Protocol)
+
+Used for:
+- Network diagnostics  
+- Checking connectivity  
+
+Example:
+ping 8.8.8.8  
+
+What happens:
+- Sends request  
+- Waits for reply  
+- Measures response time  
+
+Insight:
+Even a simple ping involves multiple internal steps
+
+---
+
+## 🔹 DHCP (Dynamic Host Configuration Protocol)
+
+Used to assign IP automatically
+
+Without DHCP:
+- Manual configuration needed  
+
+DHCP Process (DORA):
+1. Discover → Device looks for server  
+2. Offer → Server offers IP  
+3. Request → Device requests it  
+4. Acknowledge → Server confirms  
+
+Result:
+Device receives:
+- IP address  
+- Gateway  
+- DNS  
+
+---
+
+## 🔹 Default Gateway
+
+- Entry/exit point of network  
+- Usually router IP  
+
+Example:
+192.168.1.1  
+
+Role:
+If device wants internet access → traffic goes through gateway  
+
+---
+
+## 🔹 Practical Understanding
+
+From this session:
+
+- Understood layered communication  
+- Saw how:
+  - IP identifies  
+  - MAC delivers  
+  - ARP connects both  
+- Learned how routers & switches manage traffic  
+
+---
+
+## 🔹 Reflection
+
+Still feels like there’s a lot more depth to networking,  
+but now things are starting to connect instead of feeling random.
+
+This wasn’t about rushing —  
+it was about building a base strong enough to not break later.
+
+Next step → more practical labs and real implementations.
