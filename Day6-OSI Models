@@ -1,0 +1,212 @@
+# Day 6 — OSI Model + Transport Layer (TCP/UDP)
+
+---
+
+## What I Covered Today
+
+- OSI Model (7 layers)
+- Encapsulation concept
+- Layer-wise understanding (L1 → L4 focus)
+- TCP vs UDP (detailed)
+- Supporting protocols: ARP, DHCP, ICMP (Ping)
+
+---
+
+# OSI Model — Foundation of Networking
+
+The OSI Model defines how data travels across a network.
+
+### 7 Layers:
+
+1. Physical  
+2. Data Link  
+3. Network  
+4. Transport  
+5. Session  
+6. Presentation  
+7. Application  
+
+---
+
+## Encapsulation
+
+- Data moves top → bottom  
+- Each layer adds its own header  
+- This wrapping process is called encapsulation  
+
+---
+
+# Layer-wise Understanding (Focus)
+
+---
+
+## Layer 1: Physical
+
+- Actual transmission of bits (0s and 1s)  
+- Hardware layer  
+
+Examples:
+- Ethernet cables  
+- Signals  
+
+---
+
+## Layer 2: Data Link
+
+- Works with MAC Address  
+- Communication within a local network  
+
+Key Insight:
+- MAC = Physical identity  
+- Permanent (assigned to NIC)  
+
+---
+
+## Layer 3: Network
+
+- Uses IP Address  
+- Responsible for routing between networks  
+
+Key Points:
+- Chooses best path  
+- Handles packet forwarding  
+
+Protocols:
+- OSPF  
+- RIP  
+
+---
+
+## Layer 4: Transport (Main Focus)
+
+Responsible for end-to-end communication  
+
+---
+
+# TCP (Transmission Control Protocol)
+
+Reliable but heavier.
+
+### Features:
+- Connection-oriented  
+- Guarantees delivery  
+- Maintains order  
+- Error detection  
+- Retransmission  
+
+---
+
+### How it works:
+1. Connection established  
+2. Data split into packets  
+3. Sent sequentially  
+4. Acknowledgement received  
+5. Missing packets re-sent  
+6. Data reassembled  
+
+---
+
+### Use Cases:
+- File transfer  
+- Emails  
+- Web browsing  
+
+---
+
+### Downsides:
+- Slower  
+- More overhead  
+
+---
+
+# UDP (User Datagram Protocol)
+
+Fast but not reliable.
+
+### Features:
+- Connectionless  
+- No guarantee of delivery  
+- No ordering  
+- No retransmission  
+
+---
+
+### How it works:
+- Send → Receive (no checks)
+
+---
+
+### Use Cases:
+- Streaming  
+- Gaming  
+- Voice calls  
+
+---
+
+### Downsides:
+- Data loss possible  
+- No correction  
+
+---
+
+# TCP vs UDP (Core Difference)
+
+| Feature        | TCP          | UDP          |
+|---------------|--------------|--------------|
+| Connection    | Required     | Not required |
+| Speed         | Slower       | Faster       |
+| Reliability   | High         | Low          |
+| Order         | Maintained   | Not maintained |
+
+---
+
+# Simple Way to Remember
+
+- TCP → Send it correctly  
+- UDP → Send it quickly  
+
+---
+
+# Supporting Concepts
+
+---
+
+## ARP
+
+- Converts IP → MAC  
+- Helps devices communicate in LAN  
+
+---
+
+## DHCP
+
+- Automatically assigns IP address  
+
+Flow:
+- Discover → Offer → Request → Acknowledge  
+
+---
+
+## Ping (ICMP)
+
+- Used to check connectivity  
+
+Example:
+```
+ping 8.8.8.8
+```
+
+---
+
+# Key Takeaways
+
+- OSI provides structure to networking  
+- Layer 2 = MAC (local identity)  
+- Layer 3 = IP (global identity)  
+- Layer 4 decides speed vs reliability  
+
+---
+
+# Final Thought
+
+Focused on understanding how data actually moves through networks rather than just memorizing concepts.
